@@ -1,0 +1,53 @@
+#
+# Cookbook Name:: ephemeral_mdadm
+# Recipe:: default
+#
+# Copyright (C) 2013 Ryan Cragun
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+if !node.attribute?('cloud') || !node['cloud'].attribute?('provider')
+  log "Not running on a known cloud, not setting up ephemeral mdadm"
+else
+  
+  cloud = node['cloud']['provider']
+  ephemeral_devices = EphemeralMdadm::Helper.get_ephemeral_devices(cloud, node)
+
+  if ephemeral_devices.empty?
+    log "No ephemeral disks found. Skipping setup."
+  else
+    log "Ephemeral disks found for cloud '#{cloud}': #{ephemeral_devices.inspect}"
+
+    mdadm node['ephemeral_mdadm']['raid_device'] do
+      devices   ephemeral_devices
+      level     node['ephemeral_mdadm']['raid_level']
+      metadata  node['ephemeral_mdadm']['metadata']
+      action    [:create, :assemble]
+    end
+
+    execute "Format Raid Array" do
+      command "mkfs.#{node['ephemeral_mdadm']['filesystem']} #{node['ephemeral_mdadm']['raid_device']}"
+    end
+
+    directory node['ephemeral_mdadm']['mount_point'] do
+      recursive true
+    end
+
+    mount node['ephemeral_mdadm']['mount_point'] do
+      device  node['ephemeral_mdadm']['raid_device']
+      options node['ephemeral_mdadm']['mount_options']
+      fstype  node['ephemeral_mdadm']['filesystem']
+      action  [:enable, :mount]
+    end
+  end
+end

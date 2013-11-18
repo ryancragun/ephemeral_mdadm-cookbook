@@ -1,0 +1,11 @@
+{
+  "ephemeral_mdadm": { 
+    "raid_level": "1",
+    "mount_point": "/mnt/ephemeral",
+    "filesystem": "ext3",
+    "raid_device": "/dev/md1",
+  },
+  "run_list": [
+    "recipe[ephemeral_mdadm::default]"
+  ]
+}
