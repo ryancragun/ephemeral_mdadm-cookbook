@@ -23,7 +23,7 @@ default['ephemeral_mdadm']['filesystem'] = "ext4"
 default['ephemeral_mdadm']['mount_point'] = "/mnt/ephemeral"
 
 # The ephemeral raid device
-default['ephemeral_mdadm']['raid_device'] = "/dev/md0/"
+default['ephemeral_mdadm']['raid_device'] = "/dev/md0"
 
 # The ephemeral raid superblock type
 default['ephemeral_mdadm']['metadata'] = "0.90"
