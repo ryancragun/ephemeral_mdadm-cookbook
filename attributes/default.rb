@@ -22,6 +22,9 @@ default['ephemeral_mdadm']['filesystem'] = "ext4"
 # The ephemeral mount point
 default['ephemeral_mdadm']['mount_point'] = "/mnt/ephemeral"
 
+# The ephemeral mount options
+default['ephemeral_mdadm']['mount_options'] = "defaults"
+
 # The ephemeral raid device
 default['ephemeral_mdadm']['raid_device'] = "/dev/md0"
 

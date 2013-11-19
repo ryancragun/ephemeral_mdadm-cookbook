@@ -47,7 +47,7 @@ module EphemeralMdadm
         # Servers running on Xen hypervisor require the block device to be in /dev/xvdX instead of /dev/sdX
         if node.attribute?('virtualization') && node['virtualization']['system'] == "xen"
           Chef::Log.info "Mapping for devices: #{ephemeral_devices.inspect}"
-          ephemeral_devices = EphemeralLvm::Helper.fix_device_mapping(
+          ephemeral_devices = EphemeralMdadm::Helper.fix_device_mapping(
             ephemeral_devices,
             node['block_device'].keys
           )
@@ -70,7 +70,7 @@ module EphemeralMdadm
           # Removes nil elements from the ephemeral_devices array if any.
           ephemeral_devices.compact!
         else
-          Chef::Log.info "Cloud '#{cloud}' is not supported by 'ephemeral_lvm' cookbook."
+          Chef::Log.info "Cloud '#{cloud}' is not supported by 'ephemeral_mdadm' cookbook."
         end
       end
       ephemeral_devices

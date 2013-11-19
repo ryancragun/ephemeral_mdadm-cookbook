@@ -14,6 +14,7 @@ attribute "ephemeral_mdadm/filesystem",
   :display_name => "Ephemeral Raid Filesystem",
   :description => "The filesystem to be used on the ephemeral RAID device",
   :default => "ext4",
+  :choice => ["ext3", "ext4", "xfs", "brtfs"],
   :recipes => ["ephemeral_mdadm::default"],
   :required => "recommended"
 
@@ -24,23 +25,31 @@ attribute "ephemeral_mdadm/mount_point",
   :recipes => ["ephemeral_mdadm::default"],
   :required => "recommended"
 
+attribute "ephemeral_mdadm/mount_options",
+  :display_name => "Ephemeral RAID Mount Options",
+  :description => "The mount options for the ephemeral RAID device",
+  :default => "defaults",
+  :recipes => ["ephemeral_mdadm::default"],
+  :required => "optional"
+
 attribute "ephemeral_mdadm/raid_device",
   :display_name => "Ephemeral RAID device name",
   :description => "The device name for the ephemeral RAID device",
   :default => "/dev/md0",
   :recipes => ["ephemeral_mdadm::default"],
-  :required => "recommended"
+  :required => "optional"
 
 attribute "ephemeral_mdadm/metadata",
   :display_name => "Ephemeral RAID Superblock Metadata",
   :description => "The superblock type for the ephemeral RAID device",
   :default => "0.90",
   :recipes => ["ephemeral_mdadm::default"],
-  :required => "recommended"
+  :required => "optional"
 
 attribute "ephemeral_mdadm/raid_level",
   :display_name => "Ephemeral RAID Level",
   :description => "The raid level for the ephemeral RAID device",
   :default => "1",
+  :choice => %w(0 1 2 4 6),
   :recipes => ["ephemeral_mdadm::default"],
   :required => "recommended"
