@@ -32,6 +32,7 @@ else
       devices   ephemeral_devices
       level     node['ephemeral_mdadm']['raid_level'].to_i
       metadata  node['ephemeral_mdadm']['metadata']
+      bitmap    nil
       action    [:create, :assemble]
     end
 
