@@ -32,8 +32,6 @@ else
     mounted_devices = EphemeralMdadm::Helper.get_mounted_ephemeral_devices(ephemeral_devices, node)
     mounted_devices.each do |dev|
       
-      log "Ephemeral disk '#{dev[:device]}' is already mounted.  Removing and reformatting."
-
       mount dev[:mount] do
         device      dev[:device]
         fstype      dev[:fs_type]
@@ -41,7 +39,7 @@ else
         action      [:umount, :disable]
       end
 
-      execute "Reformat Ephemeral Device: #{dev[:device]}" do
+      execute "Reformatting Ephemeral Device: #{dev[:device]}" do
         command "mkfs.#{node['ephemeral_mdadm']['filesystem']} #{dev[:device]}"
         not_if { node['ephemeral_mdadm']['filesystem'] == dev[:fs_type] }
       end
@@ -55,9 +53,9 @@ else
       action    [:create, :assemble]
     end
 
-    execute "Format Raid Array" do
+    execute "Reformatting Raid Array: #{dev[:device]}" do
       command "mkfs.#{node['ephemeral_mdadm']['filesystem']} #{node['ephemeral_mdadm']['raid_device']}"
-      not_if { `file -sL #{node['ephemeral_mdadm']['raid_device']}` =~ "#{node['ephemeral_mdadm']['filesystem']}" }
+      not_if { `file -sL #{node['ephemeral_mdadm']['raid_device']}` =~ /#{node['ephemeral_mdadm']['filesystem']}/ }
     end
 
     directory node['ephemeral_mdadm']['mount_point'] do
