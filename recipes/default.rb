@@ -57,7 +57,7 @@ else
 
     execute "Format Raid Array" do
       command "mkfs.#{node['ephemeral_mdadm']['filesystem']} #{node['ephemeral_mdadm']['raid_device']}"
-      not_if { `file -sL #{node['ephemeral_mdadm']['raid_device']}` =~ /filesystem/ }
+      not_if { `file -sL #{node['ephemeral_mdadm']['raid_device']}` =~ "#{node['ephemeral_mdadm']['filesystem']}" }
     end
 
     directory node['ephemeral_mdadm']['mount_point'] do
