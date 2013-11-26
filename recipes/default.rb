@@ -39,7 +39,7 @@ else
         action      [:umount, :disable]
       end
 
-      execute "Reformatting Ephemeral Device: #{dev[:device]}" do
+      execute "Reformatting Ephemeral Device" do
         command "mkfs.#{node['ephemeral_mdadm']['filesystem']} #{dev[:device]}"
         not_if { node['ephemeral_mdadm']['filesystem'] == dev[:fs_type] }
       end
@@ -53,9 +53,9 @@ else
       action    [:create, :assemble]
     end
 
-    execute "Reformatting Raid Array: #{dev[:device]}" do
+    execute "Reformatting Raid Array" do
       command "mkfs.#{node['ephemeral_mdadm']['filesystem']} #{node['ephemeral_mdadm']['raid_device']}"
-      not_if { `file -sL #{node['ephemeral_mdadm']['raid_device']}` =~ /#{node['ephemeral_mdadm']['filesystem']}/ }
+      not_if { `file -sL #{node['ephemeral_mdadm']['raid_device']}` =~ /"#{node['ephemeral_mdadm']['filesystem']}"/ }
     end
 
     directory node['ephemeral_mdadm']['mount_point'] do
