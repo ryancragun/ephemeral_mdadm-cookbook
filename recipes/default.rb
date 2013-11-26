@@ -43,6 +43,7 @@ else
 
       execute "Reformat Ephemeral Device: #{dev[:device]}" do
         command "mkfs.#{node['ephemeral_mdadm']['filesystem']} #{dev[:device]}"
+        not_if { node['ephemeral_mdadm']['filesystem'] == dev[:fs_type] }
       end
 
     end    

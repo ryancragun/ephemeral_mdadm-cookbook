@@ -119,7 +119,7 @@ module EphemeralMdadm
     # @return [Array<Hash>] a list of hashes that contain the device, mount point, and filesystem type.
     #
     def self.get_mounted_ephemeral_devices(ephemeral_devices, node)
-      ephemeral_devices.map! do |device|
+      mapped_devices = ephemeral_devices.map do |device|
         if node['filesystem'][device]['mount']
           { :device => device, 
             :mount => node['filesystem'][device]['mount'],
@@ -127,7 +127,7 @@ module EphemeralMdadm
           }
         end
       end
-      ephemeral_devices.compact
+      mapped_devices.compact
     end
   end
 end
