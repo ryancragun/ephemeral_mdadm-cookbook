@@ -109,5 +109,25 @@ module EphemeralMdadm
       end
       devices.compact
     end
+
+    # Maps mounted ephemeral devices, their mount point and their filesystem using filesystem Ohai data
+    # and known ephemeral devices.
+    #
+    # @param ephemeral_devices [Array<String>] list of known ephemeral devices
+    # @param node [Chef::Node] the Chef node
+    #
+    # @return [Array<Hash>] a list of hashes that contain the device, mount point, and filesystem type.
+    #
+    def self.get_mounted_ephemeral_devices(ephemeral_devices, node)
+      ephemeral_devices.map! do |device|
+        if node['filesystem'][device]['mount']
+          { :device => device, 
+            :mount => node['filesystem'][device]['mount'],
+            :fs_type => node['filesystem'][device]['fs_type']
+          }
+        end
+      end
+      ephemeral_devices.compact
+    end
   end
 end
