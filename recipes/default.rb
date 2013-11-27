@@ -39,7 +39,7 @@ else
       end
 
       execute "Reformatting Ephemeral Device" do
-        command "mkfs.#{node['ephemeral_mdadm']['filesystem']} #{dev}"
+        command "mkfs.#{node['ephemeral_mdadm']['filesystem']} -q #{dev}"
         not_if { node['ephemeral_mdadm']['filesystem'] == node['filesystem'][dev]['fs_type'] }
       end
     end    
@@ -52,7 +52,7 @@ else
     end
 
     execute "Formatting Raid Array" do
-      command "mkfs.#{node['ephemeral_mdadm']['filesystem']} #{node['ephemeral_mdadm']['raid_device']}"
+      command "mkfs.#{node['ephemeral_mdadm']['filesystem']} -q #{node['ephemeral_mdadm']['raid_device']}"
       not_if { `file -sL #{node['ephemeral_mdadm']['raid_device']}` =~ /#{node['ephemeral_mdadm']['filesystem']}/ }
     end
 
