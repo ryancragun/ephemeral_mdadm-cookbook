@@ -31,10 +31,10 @@ else
     mounted_devices = EphemeralMdadm::Helper.get_mounted_ephemeral_devices(ephemeral_devices, node)
     mounted_devices.each do |dev|
       
-      mount dev[:mount] do
-        device      dev[:device]
-        fstype      dev[:fs_type]
-        mount_point dev[:mount]
+      mount dev do
+        device      dev
+        fstype      node['filesystem'][dev]['fs_type']
+        mount_point node['filesystem'][dev]['mount']
         action      [:umount, :disable]
       end
 
@@ -51,7 +51,7 @@ else
       action    [:create, :assemble]
     end
 
-    execute "Reformatting Raid Array" do
+    execute "Formatting Raid Array" do
       command "mkfs.#{node['ephemeral_mdadm']['filesystem']} #{node['ephemeral_mdadm']['raid_device']}"
       not_if { `file -sL #{node['ephemeral_mdadm']['raid_device']}` =~ /#{node['ephemeral_mdadm']['filesystem']}/ }
     end

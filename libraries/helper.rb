@@ -116,18 +116,13 @@ module EphemeralMdadm
     # @param ephemeral_devices [Array<String>] list of known ephemeral devices
     # @param node [Chef::Node] the Chef node
     #
-    # @return [Array<Hash>] a list of hashes that contain the device, mount point, and filesystem type.
+    # @return [Array<String>] an array of strings which are known mounted devices. e.g. ['/dev/xvdb']
     #
     def self.get_mounted_ephemeral_devices(ephemeral_devices, node)
-      mapped_devices = ephemeral_devices.map do |device|
-        if node['filesystem'][device]['mount']
-          { :device => device, 
-            :mount => node['filesystem'][device]['mount'],
-            :fs_type => node['filesystem'][device]['fs_type']
-          }
-        end
+      mounted_devices = ephemeral_devices.map do |device|
+        device if node['filesystem'][device]['mount']
       end
-      mapped_devices.compact
+      mounted_devices.compact
     end
   end
 end
