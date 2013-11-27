@@ -28,7 +28,6 @@ else
   else
     log "Ephemeral disks found for cloud '#{cloud}': #{ephemeral_devices.inspect}"
 
-    # If some of the disks are already mounted, unmount and reformat them
     mounted_devices = EphemeralMdadm::Helper.get_mounted_ephemeral_devices(ephemeral_devices, node)
     mounted_devices.each do |dev|
       
@@ -43,7 +42,6 @@ else
         command "mkfs.#{node['ephemeral_mdadm']['filesystem']} #{dev[:device]}"
         not_if { node['ephemeral_mdadm']['filesystem'] == dev[:fs_type] }
       end
-
     end    
 
     mdadm node['ephemeral_mdadm']['raid_device'] do
@@ -55,7 +53,7 @@ else
 
     execute "Reformatting Raid Array" do
       command "mkfs.#{node['ephemeral_mdadm']['filesystem']} #{node['ephemeral_mdadm']['raid_device']}"
-      not_if { `file -sL #{node['ephemeral_mdadm']['raid_device']}` =~ /"#{node['ephemeral_mdadm']['filesystem']}"/ }
+      not_if { `file -sL #{node['ephemeral_mdadm']['raid_device']}` =~ /#{node['ephemeral_mdadm']['filesystem']}/ }
     end
 
     directory node['ephemeral_mdadm']['mount_point'] do
