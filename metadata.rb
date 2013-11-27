@@ -8,6 +8,8 @@ version          '0.1.0'
 
 %w(ubuntu debian fedora centos scientific arch).each { |distro| supports distro }
 
+depends 'marker'
+
 recipe "ephemeral_mdadm::default", "Sets up a RAID array with ephemeral devices on a cloud server"
 
 attribute "ephemeral_mdadm/filesystem",

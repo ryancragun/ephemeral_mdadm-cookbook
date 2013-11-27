@@ -15,6 +15,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+marker "recipe_start_rightscale" do
+    template "rightscale_audit_entry.erb"
+end
 
 if !node.attribute?('cloud') || !node['cloud'].attribute?('provider')
   log "Not running on a known cloud, not setting up ephemeral mdadm"

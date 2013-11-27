@@ -10,6 +10,7 @@ group :integration do
             branch: 'release13.05', rel: 'cookbooks/sys_firewall'
   cookbook 'driveclient', github: 'racker/managed-cloud-driveclient'
   cookbook 'cloudmonitoring', github: 'racker/cookbook-cloudmonitoring'
+  cookbook 'marker', github: 'rightscale-cookbooks/marker'
 end
 
 metadata
